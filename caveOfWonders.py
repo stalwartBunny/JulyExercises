@@ -1,6 +1,34 @@
 #Text-based dungeon crawler
 from sys import exit
 
+class Mon:
+
+    name = "Rabid Dog"
+    HP = 4
+    attack1 = "Bite"
+    attack1Dmg = 1
+    attack2 = "Chomp Chomp Chomp"
+    attack2Dmg = 3
+
+    def __init__(self, name, HP, attack1, attack1Dmg, attack2, attack2Dmg):
+        self.name = name
+        self.HP = HP
+        self.attack1 = attack1
+        self.attack1Dmg = attack1Dmg
+        self.attack2 = attack2
+        self.attack1Dmg = attack2Dmg
+
+    def func(self):
+        print("After calling the func method...")
+        print(f"{self.name}'s HP is {self.HP}, {self.attack1} deals {self.attack1Dmg}, {self.attack2} deals {attack2Dmg}.")
+        print("....function end....")
+
+    #putridBeast = Mon("Putrid Beast", 4, "Swipe", 1, "Lunge", 2)
+    #putridBeast.func()
+    #print(putridBeast.HP)
+def combat():
+
+
 def pcMove(locationX, locationY):
     if locationX is 3:
         if locationY is 0:
