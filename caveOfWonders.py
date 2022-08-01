@@ -29,11 +29,11 @@ def pcMove(locationX, locationY):
         if locationY is 1:
             room41()
         elif locationY is 3:
-            room23()
+            room43()
         elif locationY is 5:
-            room25()
+            room45()
         elif locationY is 6:
-            room26()
+            room46()
     elif locationX is 5:
         if locationY is 2:
             room52()
@@ -44,7 +44,6 @@ def pcMove(locationX, locationY):
         startRoom()
 
 
-
 def startRoom():
     name = input("Please enter your name: ")
     print("Welcome to the Cave of Wonders. It's a wonder it exists at all!")
@@ -52,11 +51,11 @@ def startRoom():
     locationX = 3
     locationY = 0
     choice = input("There is a door to your left and a door to your right. Which do you take?  >>>")
-    if choice == "left" or "Left":
+    if choice == "left" or choice == "Left":
         locationX = locationX - 1
         locationY = locationY + 1
 #        return locationX, locationY
-    elif choice == "right" or "Right":
+    elif choice == "right" or choice == "Right":
         locationX = locationX + 1
         locationY = locationY + 1
 #        return locationX, locationY
@@ -66,11 +65,180 @@ def startRoom():
     pcMove(locationX, locationY)
 
 def room21():
-    print("Welcome to room 21. You walked through a door, amazing.")
+    print("Welcome to room 21. You walked through a door, amazing. It has a north and west exit.")
+    locationX = 2
+    locationY = 1
+    choice = input("Choose either forward or left: >>>")
+    if choice == "Left" or choice == "Left":
+        locationX = locationX - 1
+        locationY = locationY + 1
+    elif choice == "forward" or choice == "Forward":
+        locationY = locationY + 2
+    else:
+        print("You mumble to yourself incoherently and try that again...")
+
+    pcMove(locationX, locationY)
 
 def room41():
-    print("Holy cows, you went right through a door and ended up in room 41. Astonishing.")
+    print("Holy cows, you went right through a door and ended up in room 41. Astonishing. It has a north and east exit. ")
+    locationX = 4
+    locationY = 1
+    choice = input("There is a door forward and a door right, choose one:  >>>")
+    if choice == "forward" or choice == "Forward":
+        locationY = locationY + 2
+    elif choice == "right" or choice == "Right":
+        locationX = locationX + 1
+        locationY = locationY + 1
+    else:
+        print("You chose neither, turned around, and walked out on this entire excercise.")
 
+    pcMove(locationX, locationY)
+
+def room12():
+    print("Welcome to room 12. It's a dead end, so you return the way you came with your loot.")
+    locationX = 2
+    locationY = 1
+    pcMove(locationX, locationY)
+
+def room52():
+    print("Welcome to room 52. It's a dead end, so you return the way you came with your loot.")
+    locationX = 4
+    locationY = 1
+    pcMove(locationX, locationY)
+
+def room23():
+    print("Room 23 welcomes you. It exits to a hallway that breaks into three directions (all four, counting the way you came.)")
+    locationX = 2
+    locationY = 3
+    choice = input("Left, right, forward, or back; which do you take?  >>>")
+    if choice == "left" or choice == "Left":
+        locationX = locationX - 1
+        locationY = locationY + 1
+    elif choice == "right" or choice == "Right":
+        locationX = locationX + 2
+    elif choice == "forward" or choice == "Forward":
+        locationY = locationY + 2
+    elif choice == "back" or choice == "Back":
+        locationY = locationY - 2
+    else:
+        print("You chose neither, turned around, and walk back the way you came.")
+
+    pcMove(locationX, locationY)
+
+def room43():
+    print("Room 43 welcomes you. It exits to a hallway that breaks into three directions (all four, counting the way you came.)")
+    locationX = 4
+    locationY = 3
+    choice = input("Left, right, forward, or back; which do you take? >>>")
+    if choice == "left" or choice == "Left":
+        locationX = locationX - 2
+        locationY = locationY + 0
+    elif choice == "right" or choice == "Right":
+        locationX = locationX + 1
+        locationY = locationY + 1
+    elif choice == "forward" or choice == "Forward":
+        locationY = locationY + 2
+    elif choice == "back" or choice == "Back":
+        locationY = locationY - 2
+    else:
+        print("You have chosen an illegitimate move. Try again.")
+
+    pcMove(locationX, locationY)
+
+
+def room14():
+    print("Room 14 is a dead end and you leave the way you came.")
+    print(" ")
+    locationX = 2
+    locationY = 3
+    pcMove(locationX, locationY)
+
+def room54():
+    print("Room 54 is a dead end and you leave the way you came.")
+    print(" ")
+    locationX = 4
+    locationY = 3
+
+    pcMove(locationX, locationY)
+
+def room25():
+    print("Room 25 has one exit northward. You go through it.")
+    print(" ")
+    locationX = 2
+    locationY = 6
+
+    pcMove(locationX, locationY)
+
+def room45():
+    print("Room 45 has one exit northward. You go through it.")
+    print(" ")
+    locationX = 4
+    locationY = 6
+
+    pcMove(locationX, locationY)
+
+def room26():
+    print("Room 26 leads to one room forward that looks peaceful and one spiral stairwell that leads to the tallest tower.")
+    locationX = 2
+    locationY = 6
+    choice = input("??? >>>")
+    if choice == "forward" or choice == "Forward":
+        locationX = locationX + 1
+        locationY = locationY + 1
+    elif choice == "stairwell" or choice == "Stairwell":
+        locationX = locationX + 1
+    else:
+        print("You have chosen an illegitimate move. Try again.")
+
+    pcMove(locationX, locationY)
+
+def room36():
+    print("You arrive at the base of the tower, which also has a slide down to the start point.")
+    choice = input("Tower or start? >>> ")
+    locationX    = 3
+    locationY = 6
+    if choice == "Tower" or choice == "tower":
+        locationY = locationY - 1
+    else:
+        print("You take the slip n slide back to the beginning!")
+        startRoom()
+    pcMove(locationX, locationY)
+def room46():
+    print("Room 46 leads to one room northward that looks peaceful and one spiral stairwell that leads to the tallest tower.")
+    locationX = 4
+    locationY = 6
+    choice = input("??? >>>")
+    if choice == "forward" or choice == "Forward":
+        locationX = locationX -1
+        locationY = locationY + 1
+    elif choice == "stairwell" or choice == "Stairwell":
+        locationX = locationX - 1
+    else:
+        print("You have chosen an illegitimate move. Try again.")
+
+
+    pcMove(locationX, locationY)
+
+def room37():
+    print("Room 37 is a bedroom for servants that has gone unused for some time. Exits left and right.")
+    locationX = 3
+    locationY = 7
+    choice = input("??? >>>")
+    if choice == "left" or choice == "Left":
+        locationX = locationX - 1
+        locationY = locationY - 1
+    elif choice == "right" or choice == "Right":
+        locationX = locationX + 1
+        locationY = locationY - 1
+    else:
+        print("You have chosen an illegitimate move. Try again.")
+
+    pcMove(locationX, locationY)
+
+def room35():
+    print("Room 35 is the tower peak boss battle to purge the beast. You did it!")
+    print("Thanks for playing!")
+    exit(0)
 
 
 startRoom()
