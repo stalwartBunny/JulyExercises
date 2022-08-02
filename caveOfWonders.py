@@ -34,7 +34,7 @@ class Mon:
 def combat():
     seed = random.randint(1,11) #used on the monster list to pick a mon
 
-    pcHP = pcHP #work to do, make it recognize and pull pcHP from public variable
+    pcHP = pcHP #work to do, make it recognize and pull pcHP from global variable
     lightAttack = lightAttack #work to do, make it recognize and pull pcHP from public variable
     heavyAttack = heavyAttack #work to do, make it recognize and pull pcHP from public variable
 
