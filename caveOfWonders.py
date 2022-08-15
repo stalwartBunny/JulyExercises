@@ -32,8 +32,11 @@ class Mon:
     #putridBeast.func()
     #print(putridBeast.HP)
 def combat():
-    seed = random.randint(1,11) #used on the monster list to pick a mon
+    global pcHP
+    global lightAttack
+    global heavyAttack
 
+    seed = random.randint(1,11) #used on the monster list to pick a mon
     pcHP = pcHP #work to do, make it recognize and pull pcHP from global variable
     lightAttack = lightAttack #work to do, make it recognize and pull pcHP from public variable
     heavyAttack = heavyAttack #work to do, make it recognize and pull pcHP from public variable
@@ -60,65 +63,69 @@ def combat():
     elif seed == 10:
         monster = Mon("Hunter Mob", 7, "Axe Swing", 3, "Rifle Shot", 4)
 
-    print(f"You look around for loot only to find a {monster}!")
+    print(f"You look around for loot only to find a {monster.name}!")
+    print(f"{monster.HP}:Mon HP, {pcHP}: Player HP")
 
-    while monster.HP > 0 is True and pcHP > 0 is True:  #as long as monster's HP and playerHP is above 0
-        randomRoll = random.randomint(1, 10) #used to determine a miss from the enemy
-        seed2 = random.randint(1,11) #used to determine monster's attack choice
-        print(f"The {monster} is readying to attack, what do you do?")
-        combatChoice = input("Light attack, heavy attack, dodge, or escape >>>")
-        if randomRoll % 3 != 0: #if not div by 3 then execute attack
-            if combatChoice == "light attack" or combatChoice == "Light Attack" or combatChoice == "Light attack" or combatChoice == "light Attack":
-                if seed2 % 2 == 0:
-                    print(f"You exchange blows. The enemy used {monster.attack1}!")
-                    monster.HP = monster.HP - lightAttack
-                    pcHP = pcHP - monster.attack1Dmg #monster loses HP first during lightAttack, then player
-                elif seed2 % 2 != 0:
-                    print(f"You exchange blows. The enemy used {monster.attack2}!")
-                    monster.HP = monster.HP - lightAttack
-                    pcHP = pcHP - monster.attack2Dmg
-            elif combatChoice == "heavy attack" or combatChoice == "Heavy Attack" or combatChoice == "Heavy attack" or combatChoice == "heavy Attack":
-                if seed2 % 2 == 0:
-                    print(f"You exchange blows. The enemy used {monster.attack1}!")
-                    pcHP = pcHP - monster.attack1Dmg #during Heavy attacks monster deals dmg first but player heals a little at the end (if alive)
-                    monster.HP = monster.HP - heavyAttack
-                    pcHP = pcHP + 1
-                elif seed2 % 2 != 0:
-                    print(f"You exchange blows. The enemy used {monster.attack2}!")
-                    pcHP = pcHP - monster.attack2Dmg
-                    monster.HP = monster.HP - heavyAttack
-                    pcHP = pcHP + 1
-            elif combatChoice == "Dodge" or combatChoice == "dodge":
-                if randomRoll % 2 == 0: #succes for a dodge
-                    print(f"The blow missed!. You retaliate for big damage!")
-                    monster.HP = monster.HP - heavyAttack
-                    pcHP = pcHP + 1
-                else:
-                    if seed2 % 2 != 0: #fail on dodge
-                        print(f"You try to dodge and take half damage from {monster.attack1}.")
-                        if monster.attack1 % 2 == 0:
-                            pcHP = pcHP - (monster.attack1Dmg / 2)
-                        else:
-                            pcHP = pcHP - ((monster.attackDmg - 1) / 2)
+
+    while monster.HP > 0 is True:
+        print("Mon HP loop")
+        while pcHP > 0 is True:  #as long as monster's HP and playerHP is above 0
+            print("pcHP loop")
+            randomRoll = random.randomint(1, 10) #used to determine a miss from the enemy
+            seed2 = random.randint(1,11) #used to determine monster's attack choice
+            print(f"The {monster} is readying to attack, what do you do?")
+            combatChoice = input("Light attack, heavy attack, dodge, or escape >>>")
+            if randomRoll % 3 != 0: #if not div by 3 then execute attack
+                if combatChoice == "light attack" or combatChoice == "Light Attack" or combatChoice == "Light attack" or combatChoice == "light Attack":
+                    if seed2 % 2 == 0:
+                        print(f"You exchange blows. The enemy used {monster.attack1}!")
+                        monster.HP = monster.HP - lightAttack
+                        pcHP = pcHP - monster.attack1Dmg #monster loses HP first during lightAttack, then player
+                    elif seed2 % 2 != 0:
+                        print(f"You exchange blows. The enemy used {monster.attack2}!")
+                        monster.HP = monster.HP - lightAttack
+                        pcHP = pcHP - monster.attack2Dmg
+                elif combatChoice == "heavy attack" or combatChoice == "Heavy Attack" or combatChoice == "Heavy attack" or combatChoice == "heavy Attack":
+                    if seed2 % 2 == 0:
+                        print(f"You exchange blows. The enemy used {monster.attack1}!")
+                        pcHP = pcHP - monster.attack1Dmg #during Heavy attacks monster deals dmg first but player heals a little at the end (if alive)
+                        monster.HP = monster.HP - heavyAttack
+                        pcHP = pcHP + 1
+                    elif seed2 % 2 != 0:
+                        print(f"You exchange blows. The enemy used {monster.attack2}!")
+                        pcHP = pcHP - monster.attack2Dmg
+                        monster.HP = monster.HP - heavyAttack
+                        pcHP = pcHP + 1
+                elif combatChoice == "Dodge" or combatChoice == "dodge":
+                    if randomRoll % 2 == 0: #succes for a dodge
+                        print(f"The blow missed!. You retaliate for big damage!")
+                        monster.HP = monster.HP - heavyAttack
+                        pcHP = pcHP + 1
                     else:
-                        print(f"You try to dodge and take half damage from {monster.attack2}.")
-                        if monster.attack1 % 2 == 0:
-                            pcHP = pcHP - (monster.attack2Dmg / 2)
+                        if seed2 % 2 != 0: #fail on dodge
+                            print(f"You try to dodge and take half damage from {monster.attack1}.")
+                            if monster.attack1 % 2 == 0:
+                                pcHP = pcHP - (monster.attack1Dmg / 2)
+                            else:
+                                pcHP = pcHP - ((monster.attackDmg - 1) / 2)
                         else:
-                            pcHP = pcHP - ((monster.attackDmg - 1) / 2)
-            elif combatChoice == "escape" or combatChoice == "Escape": #leave combat
-                print("You flee the way you came!")
-                pcMove(locationX, locationY)
-            else:
-                print("Invalid input, try again.")
-        else: #this is for enemy misses aka randomRoll IS divisible by 3
-            if combatChoice == "heavy attack" or combatChoice == "Heavy Attack" or combatChoice == "Heavy attack" or combatChoice == "heavy Attack":
-                print("Your blow lands and their's misses!")
-                monster.HP = monster.HP - heavyAttack
-                pcHP = pcHP + 1
-            elif combatChoice == "light attack" or combatChoice == "Light Attack" or combatChoice == "Light attack" or combatChoice == "light Attack":
-                print("Your blow lands and their's misses!")
-                monster.HP = monster.HP - lightAttack
+                            print(f"You try to dodge and take half damage from {monster.attack2}.")
+                            if monster.attack1 % 2 == 0:
+                                pcHP = pcHP - (monster.attack2Dmg / 2)
+                            else:
+                                pcHP = pcHP - ((monster.attackDmg - 1) / 2)
+                elif combatChoice == "escape" or combatChoice == "Escape": #leave combat
+                    print("You flee the way you came!")
+                else:
+                    print("Invalid input, try again.")
+            else: #this is for enemy misses aka randomRoll IS divisible by 3
+                if combatChoice == "heavy attack" or combatChoice == "Heavy Attack" or combatChoice == "Heavy attack" or combatChoice == "heavy Attack":
+                    print("Your blow lands and their's misses!")
+                    monster.HP = monster.HP - heavyAttack
+                    pcHP = pcHP + 1
+                elif combatChoice == "light attack" or combatChoice == "Light Attack" or combatChoice == "Light attack" or combatChoice == "light Attack":
+                    print("Your blow lands and their's misses!")
+                    monster.HP = monster.HP - lightAttack
 
     if pcHP == 0: #player character runs out of HP
         print("Oh no! You died! That's the way the cookie crumbles.")
@@ -126,7 +133,6 @@ def combat():
 
     if monster.HP == 0: #monster runs out of HP
         "You defeated the monster! Good for you! You take the loot and run!"
-        pcMove(locationX, locationY)
 
 def pcMove(locationX, locationY):
     if locationX is 3:
