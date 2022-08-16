@@ -104,16 +104,16 @@ def combat():
                 else:
                     if seed2 % 2 != 0: #fail on dodge
                         print(f"You try to dodge and take half damage from {monster.attack1}.")
-                        if monster.attack1 % 2 == 0:
+                        if monster.attack1Dmg % 2 == 0:
                             pcHP = pcHP - (monster.attack1Dmg / 2)
                         else:
-                            pcHP = pcHP - ((monster.attackDmg - 1) / 2)
+                            pcHP = pcHP - ((monster.attack1Dmg - 1) / 2)
                     else:
                         print(f"You try to dodge and take half damage from {monster.attack2}.")
-                        if monster.attack1 % 2 == 0:
+                        if monster.attack2Dmg % 2 == 0:
                             pcHP = pcHP - (monster.attack2Dmg / 2)
                         else:
-                            pcHP = pcHP - ((monster.attackDmg - 1) / 2)
+                            pcHP = pcHP - ((monster.attack2Dmg - 1) / 2)
             elif combatChoice == "escape" or combatChoice == "Escape": #leave combat
                 print("You flee the way you came!")
                 pcMove()
