@@ -3,8 +3,17 @@ from sys import exit
 import random
 
 pcHP = 6
+pcHPmax = 6
 lightAttack = 2
 heavyAttack = 4
+locationX = 1
+locationY = 1
+silverBulletCounter = 0
+insightCounter = 0
+
+
+
+
 
 class Mon:
 
@@ -14,18 +23,20 @@ class Mon:
     attack1Dmg = 1
     attack2 = "Chomp Chomp Chomp"
     attack2Dmg = 3
+    loot = "Generic Loot"
 
-    def __init__(self, name, HP, attack1, attack1Dmg, attack2, attack2Dmg):
+    def __init__(self, name, HP, attack1, attack1Dmg, attack2, attack2Dmg, loot):
         self.name = name
         self.HP = HP
         self.attack1 = attack1
         self.attack1Dmg = attack1Dmg
         self.attack2 = attack2
         self.attack1Dmg = attack2Dmg
+        self.loot = loot
 
     def func(self):
         print("After calling the func method...")
-        print(f"{self.name}'s HP is {self.HP}, {self.attack1} deals {self.attack1Dmg}, {self.attack2} deals {attack2Dmg}.")
+        print(f"{self.name}'s HP is {self.HP}, {self.attack1} deals {self.attack1Dmg}, {self.attack2} deals {attack2Dmg} and holds {loot}.")
         print("....function end....")
 
     #putridBeast = Mon("Putrid Beast", 4, "Swipe", 1, "Lunge", 2)
@@ -35,6 +46,8 @@ def combat():
     global pcHP
     global lightAttack
     global heavyAttack
+    global locationX
+    global locationY
 
     seed = random.randint(1,11) #used on the monster list to pick a mon
     pcHP = pcHP #work to do, make it recognize and pull pcHP from global variable
@@ -43,25 +56,26 @@ def combat():
 
 
     if seed == 1:
-        monster = Mon("Putrid Beast", 4, "Swipe", 1, "Lunge", 2)
+        monster = Mon("Putrid Beast", 4, "Swipe", 1, "Lunge", 2, "two blood vials")
     elif seed == 2:
-        monster = Mon("Rabid Dog", 2, "Bite", 1, "Chomp Chomp Chomp", 3)
+        monster = Mon("Rabid Dog", 2, "Bite", 1, "Chomp Chomp Chomp", 3, "a blood vial")
     elif seed == 3:
-        monster = Mon("Church Servant", 7, "Cane Strike", 2, "Arcade Missile", 4)
+        monster = Mon("Church Servant", 7, "Cane Strike", 2, "Arcade Missile", 4, "silver bullets")
     elif seed == 4:
-        monster = Mon("Church Giant", 9, "Towering Slash", 4, "Stomp Stomp", 3)
+        monster = Mon("Church Giant", 9, "Towering Slash", 4, "Stomp Stomp", 3, "huge blood echoes")
     elif seed == 5:
-        monster = Mon("Lab Rat", 3, "Nibble", 1, "Swarm", 3)
+        monster = Mon("Lab Rat", 3, "Nibble", 1, "Swarm", 3, "a blood vial")
     elif seed == 6:
-        monster = Mon("Mad One", 6, "Sickle Slash", 3, "Overhead Cleave", 5)
+        monster = Mon("Mad One", 6, "Sickle Slash", 3, "Overhead Cleave", 5, "insight")
     elif seed == 7:
-        monster = Mon("Maneater Boar", 8, "Ggreeeeeee!", 6, "*Snort Snort*", 0)
+        monster = Mon("Maneater Boar", 8, "Ggreeeeeee!", 6, "*Snort Snort*", 0, "huge blood echoes")
     elif seed == 8:
-        monster = Mon("Gravekeeper Scorpion", 5, "Poisoned Pincers", 2, "Swarm", 4)
+        monster = Mon("Gravekeeper Scorpion", 5, "Poisoned Pincers", 2, "Swarm", 4, "two blood vials")
     elif seed == 9:
-        monster = Mon("Keeper of the Old Lords", 6, "Sword Slash", 2, "Flame Spray", 5)
+        monster = Mon("Keeper of the Old Lords", 6, "Sword Slash", 2, "Flame Spray", 5, "insight and echoes!")
     elif seed == 10:
-        monster = Mon("Hunter Mob", 7, "Axe Swing", 3, "Rifle Shot", 4)
+        monster = Mon("Hunter Mob", 7, "Axe Swing", 3, "Rifle Shot", 4, "silver bullets")
+
 
     print(f"You look around for loot only to find a {monster.name}!")
     print(f"{monster.HP}:Mon HP, {pcHP}: Player HP")
@@ -78,13 +92,20 @@ def combat():
         if randomRoll % 3 != 0: #if not div by 3 then execute attack
             if combatChoice == "light attack" or combatChoice == "Light Attack" or combatChoice == "Light attack" or combatChoice == "light Attack":
                 if seed2 % 2 == 0:
-                    print(f"You exchange blows. The enemy used {monster.attack1}!")
                     monster.HP = monster.HP - lightAttack
-                    pcHP = pcHP - monster.attack1Dmg #monster loses HP first during lightAttack, then player
+                    if monster.HP >=1:
+                        pcHP = pcHP - monster.attack1Dmg #monster loses HP first during lightAttack, then player
+                        print(f"You exchange blows. The enemy used {monster.attack1}!")
+                    else:
+                        print(f"You killed him before he could respond. Your HP is at {pcHP}.")
                 elif seed2 % 2 != 0:
                     print(f"You exchange blows. The enemy used {monster.attack2}!")
                     monster.HP = monster.HP - lightAttack
-                    pcHP = pcHP - monster.attack2Dmg
+                    if monster.HP >=1:
+                        pcHP = pcHP - monster.attack2Dmg #monster loses HP first during lightAttack, then player
+                        print(f"You exchange blows. The enemy used {monster.attack2}!")
+                    else:
+                        print(f"You killed him before he could respond. Your HP is at {pcHP}.")
             elif combatChoice == "heavy attack" or combatChoice == "Heavy Attack" or combatChoice == "Heavy attack" or combatChoice == "heavy Attack":
                 if seed2 % 2 == 0:
                     print(f"You exchange blows. The enemy used {monster.attack1}!")
@@ -133,7 +154,37 @@ def combat():
         exit(0)
 
     if monster.HP <= 0: #monster runs out of HP
-        "You defeated the monster! Good for you! You take the loot and run!"
+        print("You defeated the monster! Good for you! You take the loot and run.")
+
+        if monster.loot is "a blood vial":
+            print("You use a stray blood vial to patch up.")
+            if pcHP + 2 >= pcHPmax:
+                pcHP = pcHP + 2
+            else: pcHP = pcHPmax
+        elif monster.loot is "two blood vials":
+            print("You find two bloodvials but have nowhere to put them. You patch yourself up and leave the rest.")
+            if pcHP + 4 >= pcHPmax:
+                pcHP = pcHP + 4
+            else: pcHP = pcHPmax
+        elif monster.loot is "silver bullets":
+            silverBulletCounter = silverBulletCounter + 1
+            print("You pick up some silver bullets, maybe these will help fend off predators.")
+            if silverBulletCounter >= 2:
+                lightAttack = lightAttack + 1
+                print("Your light attack damage has increased by 1.")
+        elif monster.loot is "huge blood echoes":
+            heavyAttack = heavyAttack + 1
+            lightAttack = lightAttack + 1
+            print("You get massive blood echoes. Your attacks all feel stronger.")
+        elif monster.loot is "insight":
+            print("You now have enough insight to go beyond the stairwell fogwall.")
+            insightCounter = insightCounter + 1
+        elif monster.loot is "insight and echoes!":
+            insightCounter = insightCounter + 1
+            lightAttack = lightAttack + 1
+            heavyAttack = heavyAttack + 1
+            print("This much insight gets you passed the stairwell fogwall and the echoes make your attacks stronger!")
+        pcMove(locationX, locationY)
 
 def pcMove(locationX, locationY):
     if locationX is 3:
@@ -179,6 +230,9 @@ def pcMove(locationX, locationY):
 
 
 def startRoom():
+    global locationX
+    global locationY
+
     name = input("Please enter your name: ")
     print("Welcome to the Cave of Wonders. It's a wonder it exists at all!")
     print(f"We thank you, {name}, for coming here today. \n I'm sure inside you'll find your deepest desires.")
