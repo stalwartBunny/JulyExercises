@@ -52,11 +52,12 @@ def combat():
     global silverBulletCounter
     global insightCounter
 
-    seed = random.randint(1,11) #used on the monster list to pick a mon
+    seed = random.randint(1,10) #used on the monster list to pick a mon
     pcHP = pcHP #work to do, make it recognize and pull pcHP from global variable
     lightAttack = lightAttack #work to do, make it recognize and pull pcHP from public variable
     heavyAttack = heavyAttack #work to do, make it recognize and pull pcHP from public variable
 
+    print(f"Monster Seed value is: {seed}")
 
     if seed == 1:
         monster = Mon("Putrid Beast", 4, "Swipe", 1, "Lunge", 2, "two blood vials")
