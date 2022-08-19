@@ -79,9 +79,9 @@ def combat():
     elif seed == 10:
         monster = Mon("Hunter Mob", 7, "Axe Swing", 3, "Rifle Shot", 4, "silver bullets")
 
-
+    print(f"testing monster object: {monster}")
     print(f"You look around for loot only to find a {monster.name}!")
-    print(f"{monster.HP}:Mon HP, {pcHP}: Player HP")
+    print(f"{monster.HP}:Mon HP, {pcHP}: Player HP, {lightAttack}: Light attack damage, {heavyAttack}: Heavy attack damage")
 
 
     while monster.HP > 0 and pcHP > 0:
@@ -114,7 +114,8 @@ def combat():
                     print(f"You exchange blows. The enemy used {monster.attack1}!")
                     pcHP = pcHP - monster.attack1Dmg #during Heavy attacks monster deals dmg first but player heals a little at the end (if alive)
                     monster.HP = monster.HP - heavyAttack
-                    pcHP = pcHP + 1
+                    if pcHP < pcHPmax:
+                        pcHP = pcHP + 1
                 elif seed2 % 2 != 0:
                     print(f"You exchange blows. The enemy used {monster.attack2}!")
                     pcHP = pcHP - monster.attack2Dmg
@@ -122,9 +123,8 @@ def combat():
                     pcHP = pcHP + 1
             elif combatChoice == "Dodge" or combatChoice == "dodge":
                 if randomRoll % 2 == 0: #succes for a dodge
-                    print(f"The blow missed!. You retaliate for big damage!")
-                    monster.HP = monster.HP - heavyAttack
-                    pcHP = pcHP + 1
+                    print(f"The blow missed!. You retaliate for light damage!")
+                    monster.HP = monster.HP - lightAttack
                 else:
                     if seed2 % 2 != 0: #fail on dodge
                         print(f"You try to dodge and take half damage from {monster.attack1}.")
@@ -140,7 +140,7 @@ def combat():
                             pcHP = pcHP - ((monster.attack2Dmg - 1) / 2)
             elif combatChoice == "escape" or combatChoice == "Escape": #leave combat
                 print("You flee the way you came!")
-                pcMove()
+                pcMove(locationX, locationY)
             else:
                 print("Invalid input, try again.")
         else: #this is for enemy misses aka randomRoll IS divisible by 3
