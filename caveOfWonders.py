@@ -48,6 +48,9 @@ def combat():
     global heavyAttack
     global locationX
     global locationY
+    global pcHPmax
+    global silverBulletCounter
+    global insightCounter
 
     seed = random.randint(1,11) #used on the monster list to pick a mon
     pcHP = pcHP #work to do, make it recognize and pull pcHP from global variable
@@ -158,12 +161,12 @@ def combat():
 
         if monster.loot is "a blood vial":
             print("You use a stray blood vial to patch up.")
-            if pcHP + 2 >= pcHPmax:
+            if pcHP + 2 <= pcHPmax:
                 pcHP = pcHP + 2
             else: pcHP = pcHPmax
         elif monster.loot is "two blood vials":
             print("You find two bloodvials but have nowhere to put them. You patch yourself up and leave the rest.")
-            if pcHP + 4 >= pcHPmax:
+            if pcHP + 4 <= pcHPmax:
                 pcHP = pcHP + 4
             else: pcHP = pcHPmax
         elif monster.loot is "silver bullets":
@@ -175,6 +178,8 @@ def combat():
         elif monster.loot is "huge blood echoes":
             heavyAttack = heavyAttack + 1
             lightAttack = lightAttack + 1
+            pcHPmax = pcHPmax + 1
+            pcHP = pcHP + 1
             print("You get massive blood echoes. Your attacks all feel stronger.")
         elif monster.loot is "insight":
             print("You now have enough insight to go beyond the stairwell fogwall.")
@@ -183,7 +188,10 @@ def combat():
             insightCounter = insightCounter + 1
             lightAttack = lightAttack + 1
             heavyAttack = heavyAttack + 1
+            pcHPmax = pcHPmax + 1
+            pcHP = pcHP + 1
             print("This much insight gets you passed the stairwell fogwall and the echoes make your attacks stronger!")
+        print(f"Your current health is {pcHP}.")
         pcMove(locationX, locationY)
 
 def pcMove(locationX, locationY):
