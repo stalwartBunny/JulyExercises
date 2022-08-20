@@ -101,8 +101,7 @@ def combat():
                         print(f"You exchange blows. The enemy used {monster.attack1}!")
                     else:
                         print(f"You killed him before he could respond. Your HP is at {pcHP}.")
-                elif seed2 % 2 = 0:
-                    print(f"You exchange blows. The enemy used {monster.attack2}!")
+                elif seed2 % 2 == 0:
                     monster.HP = monster.HP - lightAttack
                     if monster.HP >=1:
                         pcHP = pcHP - monster.attack2Dmg #monster loses HP first during lightAttack, then player recieves heavy damage
