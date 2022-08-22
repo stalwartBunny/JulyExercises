@@ -10,6 +10,8 @@ locationX = 1
 locationY = 1
 silverBulletCounter = 0
 insightCounter = 0
+startRoomCounter = 0
+
 
 
 
@@ -51,6 +53,7 @@ def combat():
     global pcHPmax
     global silverBulletCounter
     global insightCounter
+    global startRoomCounter
 
     seed = random.randint(1,10) #used on the monster list to pick a mon
     pcHP = pcHP #work to do, make it recognize and pull pcHP from global variable
@@ -147,7 +150,8 @@ def combat():
             if combatChoice == "heavy attack" or combatChoice == "Heavy Attack" or combatChoice == "Heavy attack" or combatChoice == "heavy Attack":
                 print("Your blow lands and their's misses!")
                 monster.HP = monster.HP - heavyAttack
-                pcHP = pcHP + 1
+                if pcHP < pcHPmax:
+                    pcHP = pcHP + 1
             elif combatChoice == "light attack" or combatChoice == "Light Attack" or combatChoice == "Light attack" or combatChoice == "light Attack":
                 print("Your blow lands and their's misses!")
                 monster.HP = monster.HP - lightAttack
@@ -192,7 +196,6 @@ def combat():
             pcHP = pcHP + 1
             print("This much insight gets you passed the stairwell fogwall and the echoes make your attacks stronger!")
         print(f"Your current health is {pcHP}.")
-        pcMove(locationX, locationY)
 
 def pcMove(locationX, locationY):
     if locationX is 3:
@@ -240,25 +243,43 @@ def pcMove(locationX, locationY):
 def startRoom():
     global locationX
     global locationY
+    global startRoomCounter
 
-    name = input("Please enter your name: ")
-    print("Welcome to the Cave of Wonders. It's a wonder it exists at all!")
-    print(f"We thank you, {name}, for coming here today. \n I'm sure inside you'll find your deepest desires.")
-    locationX = 3
-    locationY = 0
-    choice = input("There is a door to your left and a door to your right. Which do you take?  >>>")
-    if choice == "left" or choice == "Left":
-        locationX = locationX - 1
-        locationY = locationY + 1
-#        return locationX, locationY
-    elif choice == "right" or choice == "Right":
-        locationX = locationX + 1
-        locationY = locationY + 1
-#        return locationX, locationY
+    if startRoomCounter == 0:
+        name = input("Please enter your name: ")
+        print("Welcome to the Cave of Wonders. It's a wonder it exists at all!")
+        print(f"We thank you, {name}, for coming here today. \n I'm sure inside you'll find your deepest desires.")
+        locationX = 3
+        locationY = 0
+        choice = input("There is a door to your left and a door to your right. Which do you take?  >>>")
+        if choice == "left" or choice == "Left":
+            locationX = locationX - 1
+            locationY = locationY + 1
+    #        return locationX, locationY
+        elif choice == "right" or choice == "Right":
+            locationX = locationX + 1
+            locationY = locationY + 1
+    #        return locationX, locationY
+        else:
+            print("You chose neither, turned around, and walked out on this entire excercise.")
+            exit(0)
+        startRoomCounter = startRoomCounter + 1
+        pcMove(locationX, locationY)
+
     else:
-        print("You chose neither, turned around, and walked out on this entire excercise.")
-        exit(0)
-    pcMove(locationX, locationY)
+        choice = input("You're back at the start! There is a door to your left and a door to your right. Which do you take?  >>>")
+        if choice == "left" or choice == "Left":
+            locationX = locationX - 1
+            locationY = locationY + 1
+    #        return locationX, locationY
+        elif choice == "right" or choice == "Right":
+            locationX = locationX + 1
+            locationY = locationY + 1
+    #        return locationX, locationY
+        else:
+            print("You chose neither, turned around, and walked out on this entire excercise.")
+            exit(0)
+        pcMove(locationX, locationY)
 
 def room21():
     print("Welcome to room 21. You walked through a door, amazing. It has a north and west exit.")
@@ -286,19 +307,24 @@ def room41():
         locationX = locationX + 1
         locationY = locationY + 1
     else:
-        print("You chose neither, turned around, and walked out on this entire excercise.")
+        print("You mumble to yourself incoherently and try that again...")
 
     pcMove(locationX, locationY)
 
 def room12():
     print("Welcome to room 12. It's a dead end, so you want to return the way you came with your loot but something is wrong...")
+    print(" ")
     combat()
+    print(" ")
     locationX = 2
     locationY = 1
     pcMove(locationX, locationY)
 
 def room52():
-    print("Welcome to room 52. It's a dead end, so you return the way you came with your loot.")
+    print("Welcome to room 52. It's a dead end, so you want to return the way you came with your loot but something is wrong...")
+    print(" ")
+    combat()
+    print(" ")
     locationX = 4
     locationY = 1
     pcMove(locationX, locationY)
@@ -318,7 +344,7 @@ def room23():
     elif choice == "back" or choice == "Back":
         locationY = locationY - 2
     else:
-        print("You chose neither, turned around, and walk back the way you came.")
+        print("You mumble to yourself incoherently and try that again...")
 
     pcMove(locationX, locationY)
 
@@ -338,20 +364,24 @@ def room43():
     elif choice == "back" or choice == "Back":
         locationY = locationY - 2
     else:
-        print("You have chosen an illegitimate move. Try again.")
+        print("You mumble to yourself incoherently and try that again...")
 
     pcMove(locationX, locationY)
 
 
 def room14():
-    print("Room 14 is a dead end and you leave the way you came.")
+    print("Room 14 is a dead end, so you want to return the way you came with your loot but something is wrong...")
+    print(" ")
+    combat()
     print(" ")
     locationX = 2
     locationY = 3
     pcMove(locationX, locationY)
 
 def room54():
-    print("Room 54 is a dead end and you leave the way you came.")
+    print("Room 54 is a dead end, so you want to return the way you came with your loot but something is wrong...")
+    print(" ")
+    combat()
     print(" ")
     locationX = 4
     locationY = 3
@@ -385,7 +415,7 @@ def room26():
     elif choice == "stairwell" or choice == "Stairwell":
         locationX = locationX + 1
     else:
-        print("You have chosen an illegitimate move. Try again.")
+        print("You mumble to yourself incoherently and try that again...")
 
     pcMove(locationX, locationY)
 
@@ -401,7 +431,7 @@ def room36():
         startRoom()
     pcMove(locationX, locationY)
 def room46():
-    print("Room 46 leads to one room northward that looks peaceful and one spiral stairwell that leads to the tallest tower.")
+    print("Room 46 leads to one room northward that looks peaceful and one spiral stairwell that leads to the tallest tower. Forward or stairwell?")
     locationX = 4
     locationY = 6
     choice = input("??? >>>")
@@ -417,7 +447,11 @@ def room46():
     pcMove(locationX, locationY)
 
 def room37():
-    print("Room 37 is a bedroom for servants that has gone unused for some time. Exits left and right.")
+    print("Room 37 is a bedroom for servants that has gone unused for some time. Exits left and right but a swarm of monsters are awoken all at once.")
+    combat()
+    combat()
+    combat()
+    print("Phew, that was rough but the loot was good. Do you go left or right?")
     locationX = 3
     locationY = 7
     choice = input("??? >>>")
@@ -428,7 +462,7 @@ def room37():
         locationX = locationX + 1
         locationY = locationY - 1
     else:
-        print("You have chosen an illegitimate move. Try again.")
+        print("You mumble to yourself incoherently and try that again...")
 
     pcMove(locationX, locationY)
 
