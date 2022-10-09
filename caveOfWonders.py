@@ -155,7 +155,9 @@ def combat():
             elif combatChoice == "light attack" or combatChoice == "Light Attack" or combatChoice == "Light attack" or combatChoice == "light Attack":
                 print("Your blow lands and their's misses!")
                 monster.HP = monster.HP - lightAttack
-
+            elif combatChoice == "dodge" or combatChoice == "Dodge":
+                print("The enemy missed their attack and you retaliate for light damage.")
+                monster.HP = monster.HP - lightAttack
     if pcHP <= 0: #player character runs out of HP
         print("Oh no! You died! That's the way the cookie crumbles.")
         exit(0)
@@ -180,18 +182,21 @@ def combat():
                 lightAttack = lightAttack + 1
                 print("Your light attack damage has increased by 1.")
         elif monster.loot is "huge blood echoes":
-            heavyAttack = heavyAttack + 1
+            heavyAttack = heavyAttack + 2
             lightAttack = lightAttack + 1
             pcHPmax = pcHPmax + 1
             pcHP = pcHP + 1
             print("You get massive blood echoes. Your attacks all feel stronger.")
         elif monster.loot is "insight":
-            print("You now have enough insight to go beyond the stairwell fogwall.")
             insightCounter = insightCounter + 1
+            if insightCounter > 1:
+                print("You now have enough insight to go beyond the stairwell fogwall.")
+            else:
+                print("You gained some insight, a little more and you can pass the fogwall.")
         elif monster.loot is "insight and echoes!":
             insightCounter = insightCounter + 1
             lightAttack = lightAttack + 1
-            heavyAttack = heavyAttack + 1
+            heavyAttack = heavyAttack + 2
             pcHPmax = pcHPmax + 1
             pcHP = pcHP + 1
             print("This much insight gets you passed the stairwell fogwall and the echoes make your attacks stronger!")
@@ -238,6 +243,106 @@ def pcMove(locationX, locationY):
     else:
         print("You seem to have fallen off the map somehow. Let's go back to the beginning.")
         startRoom()
+
+def bossFight():
+    global pcHP
+    global lightAttack
+    global heavyAttack
+    global locationX
+    global locationY
+    global pcHPmax
+    global silverBulletCounter
+    global insightCounter
+    global startRoomCounter
+
+    pcHP = pcHP #work to do, make it recognize and pull pcHP from global variable
+    lightAttack = lightAttack #work to do, make it recognize and pull pcHP from public variable
+    heavyAttack = heavyAttack #work to do, make it recognize and pull pcHP from public variable
+
+    monster = Mon("Cleric Beast", 25, "Massive Swipe", 4, "Unholy Smash", 5, "some loot")
+
+    #print(f"testing monster object: {monster}")
+    print(f"The Beast begins its rampage!")
+    print(f"{monster.HP}:Mon HP, {pcHP}: Player HP, {lightAttack}: Light attack damage, {heavyAttack}: Heavy attack damage")
+
+
+    while monster.HP > 0 and pcHP > 0:  #as long as monster's HP and playerHP is above 0
+        #print("Mon HP loop")
+        print(f"Player HP: {pcHP}, Monster HP: {monster.HP}")
+        randomRoll = random.randint(1, 9) #used to determine a miss from the enemy
+        seed2 = random.randint(1,11) #used to determine monster's attack choice
+        print(f"The {monster.name} is readying to attack, what do you do?") #prompt players for move
+        combatChoice = input("Light attack, heavy attack, dodge, or escape >>>")
+        if randomRoll % 3 != 0: #enemies have a 2/3 hit rate
+            if combatChoice == "light attack" or combatChoice == "Light Attack" or combatChoice == "Light attack" or combatChoice == "light Attack":
+                if seed2 % 2 != 0: #enemies have a slight preference for light attacks
+                    monster.HP = monster.HP - lightAttack
+                    if monster.HP >=1:
+                        pcHP = pcHP - monster.attack1Dmg #monster loses HP first during lightAttack, then player light damage
+                        print(f"You exchange blows. The enemy used {monster.attack1}!")
+                    else:
+                        print(f"You killed him before he could respond. Your HP is at {pcHP}.")
+                elif seed2 % 2 == 0:
+                    monster.HP = monster.HP - lightAttack
+                    if monster.HP >=1:
+                        pcHP = pcHP - monster.attack2Dmg #monster loses HP first during lightAttack, then player recieves heavy damage
+                        print(f"You exchange blows. The enemy used {monster.attack2}!")
+                    else:
+                        print(f"You killed him before he could respond. Your HP is at {pcHP}.")
+            elif combatChoice == "heavy attack" or combatChoice == "Heavy Attack" or combatChoice == "Heavy attack" or combatChoice == "heavy Attack":
+                if seed2 % 2 == 0:
+                    print(f"You exchange blows. The enemy used {monster.attack1}!")
+                    pcHP = pcHP - monster.attack1Dmg #during Heavy attacks monster deals dmg first but player heals a little at the end (if alive)
+                    monster.HP = monster.HP - heavyAttack
+                    if pcHP < pcHPmax:
+                        pcHP = pcHP + 1 #the player WILL get this HP back in time not to die if their health was sitting at 0 prior
+                elif seed2 % 2 != 0:
+                    print(f"You exchange blows. The enemy used {monster.attack2}!")
+                    pcHP = pcHP - monster.attack2Dmg
+                    monster.HP = monster.HP - heavyAttack
+                    if pcHP < pcHPmax:
+                        pcHP = pcHP + 1
+            elif combatChoice == "Dodge" or combatChoice == "dodge":
+                if randomRoll % 2 == 0: #succes for a dodge
+                    print(f"The blow missed!. You retaliate for light damage!")
+                    monster.HP = monster.HP - lightAttack
+                else:
+                    if seed2 % 2 != 0: #fail on dodge
+                        print(f"You try to dodge and take half damage from {monster.attack1}.")
+                        if monster.attack1Dmg % 2 == 0:
+                            pcHP = pcHP - (monster.attack1Dmg / 2)
+                        else:
+                            pcHP = pcHP - ((monster.attack1Dmg - 1) / 2)
+                    else:
+                        print(f"You try to dodge and take half damage from {monster.attack2}.")
+                        if monster.attack2Dmg % 2 == 0:
+                            pcHP = pcHP - (monster.attack2Dmg / 2)
+                        else:
+                            pcHP = pcHP - ((monster.attack2Dmg - 1) / 2)
+            elif combatChoice == "escape" or combatChoice == "Escape": #leave combat, always works
+                print("You flee the way you came!")
+                pcMove(locationX, locationY)
+            else:
+                print("Invalid input, try again.")
+        else: #this is for those 1/3 enemy misses aka randomRoll IS divisible by 3
+            if combatChoice == "heavy attack" or combatChoice == "Heavy Attack" or combatChoice == "Heavy attack" or combatChoice == "heavy Attack":
+                print("Your blow lands and their's misses!")
+                monster.HP = monster.HP - heavyAttack
+                if pcHP < pcHPmax:
+                    pcHP = pcHP + 1
+            elif combatChoice == "light attack" or combatChoice == "Light Attack" or combatChoice == "Light attack" or combatChoice == "light Attack":
+                print("Your blow lands and their's misses!")
+                monster.HP = monster.HP - lightAttack
+            elif combatChoice == "dodge" or combatChoice == "Dodge":
+                print("The enemy missed their attack and you retaliate for light damage.")
+                monster.HP = monster.HP - lightAttack
+    if pcHP <= 0: #player character runs out of HP
+        print("Oh no! You died! That's the way the cookie crumbles.")
+        exit(0)
+
+    if monster.HP <= 0: #monster runs out of HP
+        print("Beast Slain! You are victorious!")
+
 
 
 def startRoom():
@@ -408,7 +513,7 @@ def room26():
     print("Room 26 leads to one room forward that looks peaceful and one spiral stairwell that leads to the tallest tower.")
     locationX = 2
     locationY = 6
-    choice = input("??? >>>")
+    choice = input("Forward or Stairwell?? >>>")
     if choice == "forward" or choice == "Forward":
         locationX = locationX + 1
         locationY = locationY + 1
@@ -425,11 +530,17 @@ def room36():
     locationX    = 3
     locationY = 6
     if choice == "Tower" or choice == "tower":
-        locationY = locationY - 1
+        if insightCounter < 2:
+            print("You lack the insight to continue and retreat back into the dungeon.")
+            room46()
+        else:
+            print("You move up the the tower as the fogwall disappates in front of you.")
+            locationY = locationY - 1
     else:
         print("You take the slip n slide back to the beginning!")
         startRoom()
     pcMove(locationX, locationY)
+
 def room46():
     print("Room 46 leads to one room northward that looks peaceful and one spiral stairwell that leads to the tallest tower. Forward or stairwell?")
     locationX = 4
@@ -467,8 +578,9 @@ def room37():
     pcMove(locationX, locationY)
 
 def room35():
-    print("Room 35 is the tower peak boss battle to purge the beast. You did it!")
-    print("Thanks for playing!")
+    print("You arrive at the peak of the tower. In front of you stands a hideous beast of matted fur, towering over you and attacking with all its might!")
+    bossFight()
+    print("You have beaten the game! Thanks for playing!")
     exit(0)
 
 
